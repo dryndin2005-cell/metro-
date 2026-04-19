@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            /* 1. ССЫЛКА НА ТВОЕ ФОТО */
+            --bg-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Metro_train_81-717.5M-714.5M_2606_in_tunnel.jpg/1280px-Metro_train_81-717.5M-714.5M_2606_in_tunnel.jpg');
+            
+            /* 2. ССЫЛКА НА МУЗЫКУ */
+            --bg-music: '';
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; background-color: #000b0d;
+            font-family: "Lucida Console", Monaco, monospace; color: #fff;
+        }
+
+        .background {
+            position: absolute; width: 100%; height: 100%;
+            background: var(--bg-image) no-repeat center center;
+            background-size: cover;
+            filter: saturate(0.6) hue-rotate(160deg) brightness(30%);
+            z-index: 1;
+            animation: fadeIn 2s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .vhs-overlay {
+            position: absolute; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            z-index: 5; pointer-events: none; opacity: 0.3;
+        }
+
+        .container {
+            position: relative; z-index: 10;
+            display: flex; flex-direction: column;
+            justify-content: space-between;
+            height: 100%; padding: 40px; box-sizing: border-box;
+        }
+
+        .top-info {
+            display: flex; justify-content: space-between;
+            text-transform: uppercase; font-size: 14px;
+            letter-spacing: 2px; border-bottom: 1px solid rgba(0, 210, 255, 0.3);
+            padding-bottom: 10px; color: #00d2ff;
+        }
+
+        .sidebar {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 280px;
+            background: rgba(0, 40, 60, 0.4);
+            padding: 25px;
+            backdrop-filter: blur(8px);
+            z-index: 11;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            color: #00d2ff;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(0, 210, 255, 0.3);
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        .admin-sidebar { 
+            left: 50px; 
+            border-left: 3px solid #00d2ff;
+        }
+
+        .info-sidebar { 
+            right: 50px; 
+            border-right: 3px solid #ff0000;
+            text-align: right;
+        }
+
+        .item-list { list-style: none; padding: 0; margin: 0; }
+        
+        .item {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .item-label { color: #00d2ff; font-size: 12px; display: block; margin-bottom: 2px; }
+
+        .main-logo { text-align: center; }
+
+        h1 {
+            font-size: 90px; margin: 0; font-weight: bold;
+            letter-spacing: 20px; color: #fff;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        /* ЭФФЕКТ РЕДКОГО ГЛЮКА ЭЛЕКТРИКИ */
+        .m-red { 
+            color: #ff0000; 
+            text-shadow: 0 0 25px #ff0000, 0 0 50px #ff0000;
+            /* Цикл 15 секунд */
+            animation: rare-flicker 15s linear infinite; 
+        }
+
+        @keyframes rare-flicker {
+            /* 0% - 94% времени лампа горит стабильно (ок. 14 секунд) */
+            0%, 94%, 96.5%, 98.5%, 100% {
+                opacity: 1;
+                text-shadow: 0 0 25px #ff0000, 0 0 50px #ff0000;
+            }
+            /* Кратковременные провалы в самом конце цикла */
+            95%, 97%, 99% {
+                opacity: 0.1;
+                text-shadow: none;
+            }
+        }
+
+        .sub-nexus { font-size: 18px; letter-spacing: 12px; color: #00d2ff; margin-top: 10px; }
+
+        .bottom-section { width: 400px; margin: 0 auto; }
+        #status { font-size: 11px; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+
+        .bar-bg { width: 100%; height: 3px; background: rgba(0, 210, 255, 0.1); }
+        #bar { width: 0%; height: 100%; background: #ff0000; box-shadow: 0 0 15px #ff0000; transition: width 0.4s; }
+
+        .rec { color: #ff0000; animation: blink 1s steps(2) infinite; }
+        @keyframes blink { 0% { opacity: 0; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="background"></div>
+    <div class="vhs-overlay"></div>
+
+    <audio id="loading-music" loop>
+        <source id="music-src" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <div class="top-info">
+            <div>SYSTEM: NEXUS_CORE</div>
+            <div class="rec">● REC</div>
+            <div id="clock">00:00:00</div>
+        </div>
+
+        <div class="sidebar admin-sidebar">
+            <div class="sidebar-title">АДМИНИСТРАЦИЯ</div>
+            <div class="item-list">
+                <div class="item">STALIN</div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+            </div>
+        </div>
+
+        <div class="sidebar info-sidebar">
+            <div class="sidebar-title">ИНФОРМАЦИЯ О СЕРВЕРЕ</div>
+            <div class="item-list">
+                <div class="item"><span class="item-label">LOCATION:</span> <span id="map-display">Загрузка...</span></div>
+                <div class="item"><span class="item-label">GAMEMODE:</span> Metrostroi</div>
+                <div class="item"><span class="item-label">COMMUNITY:</span> discord.gg/5dsvpsgced</div>
+                <div class="item"><span class="item-label">VERSION:</span> 1.0.4b</div>
+            </div>
+        </div>
+
+        <div class="main-logo">
+            <h1><span class="m-red">М</span>ЕТРО</h1>
+            <div class="sub-nexus">PROJECT 2026</div>
+        </div>
+
+        <div class="bottom-section">
+            <div id="status">Инициализация систем...</div>
+            <div class="bar-bg"><div id="bar"></div></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        window.onload = function() {
+            var musicUrl = getComputedStyle(document.documentElement).getPropertyValue('--bg-music').replace(/'/g, "").trim();
+            var audio = document.getElementById('loading-music');
+            if (musicUrl && musicUrl !== "") {
+                document.getElementById('music-src').src = musicUrl;
+                audio.load();
+                audio.volume = 0.5;
+                audio.play().catch(() => {});
+            }
+        };
+
+        function updateClock() {
+            document.getElementById('clock').innerHTML = new Date().toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+
+        function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamemode ) {
+            document.getElementById('map-display').innerHTML = mapname;
+        }
+
+        function SetStatusChanged(s) { document.getElementById('status').innerHTML = s; }
+        function SetFilesNeeded(n) { window.tn = n; }
+        function SetFilesRemaining(r) {
+            if(window.tn) document.getElementById('bar').style.width = ((window.tn-r)/window.tn*100) + '%';
+        }
+    </script>
+
+</body>
+</html>
